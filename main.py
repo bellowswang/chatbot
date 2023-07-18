@@ -58,3 +58,7 @@ async def get_last_user_message(payload: dict):
         return chatbot(user_messages[-1], qa)
     else:
         return 'No message from user.'
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host='157.245.65.240', port=8000)

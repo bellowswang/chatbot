@@ -2,3 +2,6 @@ fastapi
 langchain==0.0.235
 pydantic==1.10.11
 chromadb==0.3.29
+pymupdf
+openai
+tiktoken
