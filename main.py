@@ -36,10 +36,11 @@ def chatbot(user_input, qa):
     query = f"###Prompt {user_input}"
     try:
         llm_response = qa(query)
-        print(llm_response["result"])
+        result = llm_response["result"]
+        print(result)
     except Exception as err:
         print('Exception occurred. Please try again', str(err))
-    return llm_response["result"]
+    return result
 
 app = FastAPI()
 
