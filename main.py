@@ -5,7 +5,7 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
-
+from fastapi import HTTPException
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
@@ -40,9 +40,12 @@ def chatbot(user_input, qa):
         llm_response = qa(query)
         result = llm_response["result"]
         print(result)
+        return result
+    except KeyError:
+        raise HTTPException(status_code=400, detail="Invalid response from Chatbot model.")
     except Exception as err:
-        print('Exception occurred. Please try again', str(err))
-    return result
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(err)}")
+
 
 app = FastAPI()
 
