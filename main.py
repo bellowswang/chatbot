@@ -7,6 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from config import oak
 from pydantic import BaseModel
 
@@ -44,6 +45,19 @@ def chatbot(user_input, qa):
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",
+    "https://tokengated-next-chatgpt-ochre.vercel.app"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+    
 class Message(BaseModel):
     role: str
     content: str
