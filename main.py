@@ -79,6 +79,6 @@ if __name__ == "__main__":
     import uvicorn
 
     app.add_middleware(HTTPSRedirectMiddleware)
-    uvicorn.run(app, host='api.kssoftware.xyz', port=8000,
+    uvicorn.run(app, host='api.kssoftware.xyz', port=443,
                 ssl_keyfile="/etc/letsencrypt/live/api.kssoftware.xyz/privkey.pem",
                 ssl_certfile="/etc/letsencrypt/live/api.kssoftware.xyz/fullchain.pem")
