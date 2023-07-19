@@ -5,6 +5,7 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
+from langchain.llms import OpenAI
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,9 +33,10 @@ vectordb.persist()
 # Chatting with PDF Documents
 retriever = vectordb.as_retriever()
 llm = ChatOpenAI(model_name='gpt-3.5-turbo-16k-0613')
-qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+llm2 = OpenAI()
 
-def chatbot(user_input, qa):
+def chatbot(user_input, retriever, model):
+    qa = RetrievalQA.from_chain_type(llm=model, chain_type="stuff", retriever=retriever)
     query = f"###Prompt {user_input}"
     try:
         llm_response = qa(query)
@@ -71,7 +73,7 @@ async def get_last_user_message(payload: dict):
     user_messages = [message["content"] for message in messages if message["role"] == "user"]
     
     if user_messages:
-        return chatbot(user_messages[-1], qa)
+        return chatbot(user_messages[-1], retriever, llm2)
     else:
         return 'No message from user.'
 
