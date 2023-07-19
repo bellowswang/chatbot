@@ -52,7 +52,6 @@ origins = [
 ]
 
 app.add_middleware(
-    HTTPSRedirectMiddleware,
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -78,6 +77,8 @@ async def get_last_user_message(payload: dict):
 
 if __name__ == "__main__":
     import uvicorn
+
+    app.add_middleware(HTTPSRedirectMiddleware)
     uvicorn.run(app, host='157.245.65.240', port=8000,
                 ssl_keyfile="/etc/letsencrypt/live/api.kssoftware.xyz/privkey.pem",
                 ssl_certfile="/etc/letsencrypt/live/api.kssoftware.xyz/fullchain.pem")
