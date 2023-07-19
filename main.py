@@ -8,6 +8,7 @@ from langchain.chains import RetrievalQA
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from config import oak
 from pydantic import BaseModel
 
@@ -51,6 +52,7 @@ origins = [
 ]
 
 app.add_middleware(
+    HTTPSRedirectMiddleware,
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -76,4 +78,6 @@ async def get_last_user_message(payload: dict):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host='157.245.65.240', port=8000)
+    uvicorn.run(app, host='157.245.65.240', port=8000,
+                ssl_keyfile="/etc/letsencrypt/live/api.kssoftware.xyz/privkey.pem",
+                ssl_certfile="/etc/letsencrypt/live/api.kssoftware.xyz/fullchain.pem")
